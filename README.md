@@ -1,11 +1,11 @@
-About auto3d
-============
+About auto3d-feedstock
+======================
+
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/auto3d-feedstock/blob/main/LICENSE.txt)
 
 Home: https://github.com/isayevlab/Auto3D_pkg
 
 Package license: MIT
-
-Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/auto3d-feedstock/blob/main/LICENSE.txt)
 
 Summary: Auto3D is a Python package for generating low-energy conformers from SMILES.
 
