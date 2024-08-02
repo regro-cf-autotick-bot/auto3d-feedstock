@@ -1,5 +1,5 @@
 {% set name = "Auto3D" %}
-{% set version = "2.2.2" %}
+{% set version = "2.3.0" %}
 
 package:
   name: {{ name|lower }}
@@ -50,3 +50,4 @@ about:
 extra:
   recipe-maintainers:
     - LiuCMU
+    - ghutchis
