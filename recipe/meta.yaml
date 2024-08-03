@@ -6,8 +6,8 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: abba76886fd930de440eb5894cd30cafd049186bce1977ffee880f172093eab6
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/auto3d-{{ version }}.tar.gz
+  sha256: 0b6aa25d19d389adc3da6283be7db95e998c19deaed0d03800cd36f4cd9a3b87
 
 build:
   noarch: python
