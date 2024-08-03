@@ -144,4 +144,5 @@ Feedstock Maintainers
 =====================
 
 * [@LiuCMU](https://github.com/LiuCMU/)
+* [@ghutchis](https://github.com/ghutchis/)
 
