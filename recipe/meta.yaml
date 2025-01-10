@@ -6,20 +6,20 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/auto3d-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/auto3d-{{ version }}.tar.gz
   sha256: 0b6aa25d19d389adc3da6283be7db95e998c19deaed0d03800cd36f4cd9a3b87
 
 build:
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv
-  number: 0
+  number: 1
 
 requirements:
   host:
-    - python >=3.7
+    - python {{ python_min }}
     - pip
   run:
-    - python >=3.7
+    - python >={{ python_min }}
     - numpy
     - pytorch
     - rdkit >=2020.09.01
@@ -37,6 +37,7 @@ test:
     - Auto3D
   requires:
     - pip
+    - python {{ python_min }}
   commands:
     - pip check
 
