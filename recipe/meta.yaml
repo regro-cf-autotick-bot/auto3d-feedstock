@@ -1,54 +1,97 @@
-{% set name = "Auto3D" %}
-{% set version = "2.3.0" %}
+{% set name = "auto3d" %}
+{% set version = "3.2.0" %}
+{% set python_min = "3.11" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/auto3d-{{ version }}.tar.gz
-  sha256: 0b6aa25d19d389adc3da6283be7db95e998c19deaed0d03800cd36f4cd9a3b87
+  # PyPI sdist for 3.2.0, published 2026-10-10. Verified against the PyPI JSON
+  # API rather than a local build: a locally built sdist is not guaranteed
+  # byte-identical to the one the release workflow uploaded, and conda-forge
+  # checks this hash against what it downloads.
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/auto3d-{{ version }}.tar.gz
+  sha256: 2624cbc81f8a3b064e4ddfa70b147267686279d22e86fd512abc6ba08ec0ea6b
 
 build:
+  # Auto3D is pure Python -- its own wheel is py3-none-any -- so this is
+  # noarch even though pytorch and rdkit are not. noarch means one build
+  # serves every platform; the compiled dependencies are resolved at install
+  # time, not build time.
   noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
   number: 0
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  entry_points:
+    - auto3d = Auto3D.presentation.auto3Dcli:cli
 
 requirements:
   host:
-    - python >=3.7
+    - python {{ python_min }}
     - pip
+    - setuptools >=61.0
+    - wheel
   run:
-    - python >=3.7
-    - numpy
-    - pytorch
-    - rdkit >=2020.09.01
-    - openbabel >=3.1.1
-    - pandas
-    - pyyaml
-    - send2trash
-    - tqdm
-    - psutil
-    - torchani
-    - ase
+    - python >={{ python_min }}
+    # Names below are conda-forge names, which differ from the PyPI names in
+    # two places: torch -> pytorch, and Send2Trash -> send2trash.
+    - ase >=3.23.0
+    - numpy >=1.21.0
+    - pandas >=1.3.0
+    - psutil >=5.8.0
+    - pydantic >=2.0
+    - pytorch >=2.8
+    - pyyaml >=6.0
+    - rdkit >=2022.9.5
+    - requests >=2.32.3
+    - rich >=13.0.0
+    - send2trash >=1.8.0
+    - torchani >=2.8
+    - tqdm >=4.60.0
+    - typer >=0.12.0
 
 test:
   imports:
+    # Deliberately only the top-level package. Since 3.0.0 `import Auto3D`
+    # loads no torch and no rdkit (0.03 s, 154 modules), so this stays a cheap
+    # smoke test; importing a submodule here would pull the whole dependency
+    # tree into the test phase for no extra signal.
     - Auto3D
-  requires:
-    - pip
   commands:
-    - pip check
+    # No `pip check`: the pip metadata intentionally requires aimnet (pip
+    # users get it), while this package intentionally omits it (conda-forge
+    # cannot ship it -- nvalchemi-toolkit-ops is pip-only). pip check would
+    # flag exactly that intended difference.
+    - auto3d --help
+    - auto3d models list
+  requires:
+    - python {{ python_min }}
+    - pip
 
 about:
   home: https://github.com/isayevlab/Auto3D_pkg
-  summary: Auto3D is a Python package for generating low-energy conformers from SMILES.
+  summary: Generating low-energy 3D conformers from SMILES/SDF
+  description: |
+    Auto3D generates low-energy 3D conformers from SMILES strings or SDF files.
+    It enumerates tautomers and stereoisomers, optimizes geometries with a
+    neural network potential (AIMNet2 by default, optionally ANI2x/ANI2xt), and
+    ranks the results by energy.
+
+    This conda package ships with the ANI2x/ANI2xt engines and the ASE
+    thermochemistry APIs working out of the box. The default AIMNet2 engine
+    requires the `aimnet` package, which cannot be packaged for conda-forge
+    (its dependency nvalchemi-toolkit-ops is pip-only); add it inside the
+    environment with `pip install aimnet`. Without it, requesting an AIMNet
+    engine exits with that exact instruction.
   license: MIT
   license_family: MIT
   license_file: LICENSE
+  doc_url: https://auto3d.readthedocs.io
+  dev_url: https://github.com/isayevlab/Auto3D_pkg
 
 extra:
   recipe-maintainers:
     - isayev
     - LiuCMU
     - ghutchis
+    - isayev

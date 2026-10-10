@@ -7,16 +7,34 @@ Home: https://github.com/isayevlab/Auto3D_pkg
 
 Package license: MIT
 
-Summary: Auto3D is a Python package for generating low-energy conformers from SMILES.
+Summary: Generating low-energy 3D conformers from SMILES/SDF
+
+Development: https://github.com/isayevlab/Auto3D_pkg
+
+Documentation: https://auto3d.readthedocs.io
+
+Auto3D generates low-energy 3D conformers from SMILES strings or SDF files.
+It enumerates tautomers and stereoisomers, optimizes geometries with a
+neural network potential (AIMNet2 by default, optionally ANI2x/ANI2xt), and
+ranks the results by energy.
+
+This conda package ships with the ANI2x/ANI2xt engines and the ASE
+thermochemistry APIs working out of the box. The default AIMNet2 engine
+requires the `aimnet` package, which cannot be packaged for conda-forge
+(its dependency nvalchemi-toolkit-ops is pip-only); add it inside the
+environment with `pip install aimnet`. Without it, requesting an AIMNet
+engine exits with that exact instruction.
+
 
 Current build status
 ====================
 
 
-<table><tr><td>All platforms:</td>
+<table><tr>
+    <td>All platforms:</td>
     <td>
-      <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=17924&branchName=main">
-        <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/auto3d-feedstock?branchName=main">
+      <a href="https://github.com/conda-forge/auto3d-feedstock/actions/workflows/conda-build.yml">
+        <img src="https://github.com/conda-forge/auto3d-feedstock/actions/workflows/conda-build.yml/badge.svg?event=push&branch=main">
       </a>
     </td>
   </tr>
@@ -39,31 +57,73 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `auto3d` can be installed with `conda`:
+How to use
+----------
+
+<details>
+<summary>With conda</summary>
 
 ```
 conda install auto3d
 ```
 
-or with `mamba`:
+</details>
+
+<details>
+<summary>With mamba</summary>
 
 ```
 mamba install auto3d
 ```
 
-It is possible to list all of the versions of `auto3d` available on your platform with `conda`:
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+# for adding to your local project
+pixi add auto3d
+# for installing globally
+pixi global install auto3d
+```
+
+</details>
+
+Search package versions
+-----------------------
+
+It is possible to list all of the versions of `auto3d` available on your platform:
+
+<details>
+<summary>With conda</summary>
 
 ```
 conda search auto3d --channel conda-forge
 ```
 
-or with `mamba`:
+</details>
+
+<details>
+<summary>With mamba</summary>
 
 ```
 mamba search auto3d --channel conda-forge
 ```
 
-Alternatively, `mamba repoquery` may provide more information:
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+pixi search auto3d --channel conda-forge
+```
+
+</details>
+
+<details>
+<summary>With mamba repoquery, which may provide more information</summary>
 
 ```
 # Search all versions available on your platform:
@@ -75,6 +135,8 @@ mamba repoquery whoneeds auto3d --channel conda-forge
 # List dependencies of `auto3d`:
 mamba repoquery depends auto3d --channel conda-forge
 ```
+
+</details>
 
 
 About conda-forge
@@ -98,12 +160,12 @@ it is possible to build and upload installable packages to the
 [conda-forge](https://anaconda.org/conda-forge) [anaconda.org](https://anaconda.org/)
 channel for Linux, Windows and OSX respectively.
 
-To manage the continuous integration and simplify feedstock maintenance
+To manage the continuous integration and simplify feedstock maintenance,
 [conda-smithy](https://github.com/conda-forge/conda-smithy) has been developed.
 Using the ``conda-forge.yml`` within this repository, it is possible to re-render all of
 this feedstock's supporting files (e.g. the CI configuration files) with ``conda smithy rerender``.
 
-For more information please check the [conda-forge documentation](https://conda-forge.org/docs/).
+For more information, please check the [conda-forge documentation](https://conda-forge.org/docs/).
 
 Terminology
 ===========
@@ -130,7 +192,7 @@ merged, the recipe will be re-built and uploaded automatically to the
 everybody to install and use from the `conda-forge` channel.
 Note that all branches in the conda-forge/auto3d-feedstock are
 immediately built and any created packages are uploaded, so PRs should be based
-on branches in forks and branches in the main repository should only be used to
+on branches in forks, and branches in the main repository should only be used to
 build distinct package versions.
 
 In order to produce a uniquely identifiable distribution:
@@ -145,4 +207,5 @@ Feedstock Maintainers
 
 * [@LiuCMU](https://github.com/LiuCMU/)
 * [@ghutchis](https://github.com/ghutchis/)
+* [@isayev](https://github.com/isayev/)
 
